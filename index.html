@@ -15,7 +15,7 @@
             background: linear-gradient(var(--black-overlay), var(--black-overlay)), 
                         url('plano-fundo.png') no-repeat center center fixed;
             background-size: cover; 
-            color: #ffffff;
+            color: #857101;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
             display: flex;
@@ -42,23 +42,29 @@
         }
 
 h1 {
-    font-size: 2.6rem; 
+    font-size: 3rem; 
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 15px;
+    letter-spacing: 20px;
     margin-top: 40px; /* Adiciona o espaçamento no topo */
     margin-bottom: 10px; /* Adiciona um pequeno espaço em relação ao subtítulo */
-    color: var(--gold);
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+    color: rgb(184, 159, 49);
+    text-shadow: 2px 2px 10px rgba(184,159,59,0.5);
+}
+h2 {
+    font-size: 1.8rem; /* Altere este valor para o tamanho que desejar */
+    color: var(--gold); /* Exemplo para manter a cor dourada */
+    text-align: center;
+    letter-spacing: 5px; /* Para dar um espaçamento entre as letras similar ao título */
 }
 
         .subtitle {
-            font-size: 2.5rem;
-            color: #ffffff;
+            font-size: 2rem;
+            color: #a7a17b;
             text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
             opacity: 0.9;
             margin-top: 350px;
-            letter-spacing: 7px;
+            letter-spacing: 5px;
             font-weight: 600;
         }
 
@@ -90,7 +96,7 @@ h1 {
         .card:hover {
             transform: translateY(-5px);
             background: rgb(184, 159, 49); 
-            color: #1a1a1a; 
+            color: #000000; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             border-color: var(--gold);
             backdrop-filter: blur(0px);
@@ -106,7 +112,7 @@ h1 {
         }
 
         .card:hover .card-number {
-            color: #8B7500;
+            color: #4d4100;
         }
 
         .card-logo {
@@ -114,7 +120,7 @@ h1 {
             height: 55px;
             object-fit: contain;
             margin-right: 15px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 2px 4px rgb(0, 0, 0));
         }
 
         .card-title {
