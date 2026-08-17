@@ -217,11 +217,17 @@ h2 {
             <span class="card-title">Infocrim 4.0</span>
         </a>
 
-        <a href="http://www.copom.intranet.policiamilitar.sp.gov.br/tecnologia/controle_dejem_por_id/" target="_blank" class="card">
-            <span class="card-number">10</span>
-            <img src="DEJEM.png" class="card-logo" alt="Logo DEJEM">
-            <span class="card-title">Escala DEJEM</span>
-        </a>
+<div class="card dejem-card">
+            <div class="dejem-header">
+                <span class="card-number">10</span>
+                <img src="DEJEM.png" class="card-logo" alt="Logo DEJEM">
+                <span class="card-title">Escala DEJEM</span>
+            </div>
+            <div class="dejem-form">
+                <input type="text" id="idEscalaInput" class="dejem-input" placeholder="ID Escala (7 dígitos)" maxlength="7" pattern="\d{7}">
+                <button type="button" class="dejem-button" onclick="acessarEscalaDejem()">Acessar Escala</button>
+            </div>
+        </div>
 
         <a href="https://web.whatsapp.com/" target="_blank" class="card">
             <span class="card-number">11</span>
