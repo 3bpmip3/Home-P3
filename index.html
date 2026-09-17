@@ -13,7 +13,7 @@
 
         body {
             background: linear-gradient(var(--black-overlay), var(--black-overlay)), 
-                        url('plano-fundo3.png') no-repeat center center fixed;
+                        url('plano-fundo.png') no-repeat center center fixed;
             background-size: cover; 
             color: #857101;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -28,6 +28,8 @@
         .header {
             text-align: center; /* Mantém o alinhamento central */
             margin-bottom: 5px; /* Diminua este valor para aproximar mais */
+            position: relative;
+            width: 100%;
         }
 
         .subtitle {
@@ -35,10 +37,13 @@
         }
 
         .brasao {
-            width: 180px; 
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 120px; 
             height: auto;
-            margin-bottom: 20px;
             filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.7));
+            z-index: 10;
         }
 
         h1 {
@@ -83,11 +88,13 @@
             background: var(--white-glass);
             backdrop-filter: blur(4px);
             border-radius: 15px;
-            padding: 10px 20px; 
+            padding: 12px 20px; 
             text-decoration: none;
             color: #ffffff; 
             display: flex;
             align-items: center;
+            min-height: 10px; /* Padroniza a altura de todos os cards para a do card DEJEM */
+            box-sizing: border-box;
             transition: all 0.3s ease;
             position: relative;
             border: 1px solid rgba(255, 255, 255, 0); 
@@ -106,7 +113,7 @@
         .card-number {
             font-size: 1.3rem;
             color: var(--gold); 
-            margin-right: 35px;
+            margin-right: 25px;
             font-weight: 900;
             min-width: 30px;
             transition: color 0.3s ease;
@@ -117,7 +124,7 @@
         }
 
         .card-logo {
-            width: 55px;
+            width: 100px;
             height: 55px;
             object-fit: contain;
             margin-right: 15px;
@@ -133,6 +140,7 @@
         /* Estilos específicos para a caixa interativa do Card 10 */
         .dejem-card {
             flex-direction: column;
+            justify-content: center;
             align-items: stretch;
             gap: 8px;
         }
@@ -205,7 +213,7 @@
         @media (max-width: 600px) {
             h1 { font-size: 1.8rem; }
             .container { grid-template-columns: 1fr; width: 90%; }
-            .brasao { width: 140px; }
+            .brasao { width: 70px; top: 10px; right: 10px; }
             .header { margin-bottom: 30px; }
         }
     </style>
@@ -274,7 +282,7 @@
             <span class="card-title">Infocrim 4.0</span>
         </a>
 
-        <!-- Botão 10 Atualizado -->
+        <!-- Card 10 (Escala DEJEM) -->
         <div class="card dejem-card">
             <div class="dejem-header">
                 <span class="card-number">10</span>
@@ -293,7 +301,7 @@
             <span class="card-title">WhatsApp Web</span>
         </a>
 
-        <a href="https://sgp-prod.intranet.policiamilitar.sp.gov.br/SGP/Cadastro" target="_blank" class="card">
+        <a href="https://sgp-prod.intranet.policiamilitar.sp.gov.br/SGP/Dashboard" target="_blank" class="card">
             <span class="card-number">12</span>
             <img src="SGP.png" class="card-logo" alt="Logo SGP">
             <span class="card-title">Portal RH - SGP</span>
@@ -326,7 +334,7 @@
         <a href="http://sicoordop.intranet.policiamilitar.sp.gov.br/login/index.php" target="_blank" class="card">
             <span class="card-number">17</span>
             <img src="CoordOpPM.png" class="card-logo" alt="Logo CoordOp">
-            <span class="card-title">SICoorOp PM</span>
+            <span class="card-title">SicoorOp PM</span>
         </a>
 
         <a href="http://10.40.68.79:8000/" target="_blank" class="card">
