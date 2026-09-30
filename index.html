@@ -1,10 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <!-- Barra de Status Superior -->
+<div class="top-bar">
+    <div class="status-system">
+        <div class="status-dot"></div>
+    </div>
+    <div id="live-clock">--/--/---- --:--:--</div> <!-- O relógio é injetado aqui -->
+</div>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard 3º Batalhão de Caçadores</title>
     <style>
+        /* Estilização da Barra Superior que contém o relógio */
+.top-bar {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Fundo escuro translúcido */
+    border-bottom: 1px solid var(--gold); /* Linha dourada discreta embaixo */
+    padding: 10px 25px;
+    display: flex-start;
+    justify-content: flex-start; /* Separa os itens (ex: status à esquerda, relógio à direita) */
+    align-items: center;
+    backdrop-filter: blur(4px); /* Efeito de desfoque moderno */
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+/* Estilização específica do texto do Relógio */
+#live-clock {
+    font-family: 'Inter', monospace; /* Fonte limpa ou monoespacada para os números não saltarem */
+    font-size: 1.1rem;               /* Tamanho da letra */
+    color: var(--gold);              /* Cor dourada padrão do projeto */
+    font-weight: 700;                /* Negrito */
+    letter-spacing: 2px;             /* Espaçamento entre os caracteres */
+    text-shadow: 0 0 8px rgba(197, 179, 88, 0.4); /* Brilho suave */
+}
+
         :root {
             --gold: #C5B358; 
             --white-glass: rgba(255, 255, 255, 0.1); 
@@ -349,6 +380,20 @@
     </footer>
 
     <script>
+        // Atualização do Relógio em Tempo Real na Barra Superior
+    function atualizarRelogio() {
+        const agora = new Date();
+        const dataFormatada = agora.toLocaleDateString('pt-BR');
+        const horaFormatada = agora.toLocaleTimeString('pt-BR');
+        document.getElementById('live-clock').innerText = `${dataFormatada} | ${horaFormatada}`;
+    }
+    
+    // Executa a função a cada 1 segundo (1000ms)
+    setInterval(atualizarRelogio, 1000);
+    
+    // Executa imediatamente ao carregar a página para não exibir o texto padrão "--/--/----"
+    atualizarRelogio();
+
         // Função para validar e redirecionar a Escala DEJEM
         function acessarEscalaDejem() {
             const input = document.getElementById('idEscalaInput');
