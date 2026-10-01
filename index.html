@@ -227,6 +227,7 @@
 
         footer {
             margin-top: auto;
+            box-sizing: border-box; /* inclui o padding na largura de 100% (sem rolagem horizontal) */
             padding: 25px;
             color: var(--gold);
             background: rgba(0, 0, 0, 0.7);
@@ -237,11 +238,123 @@
             text-align: center;
         }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            .container { grid-template-columns: 1fr; width: 90%; }
-            .brasao { width: 70px; top: 10px; right: 10px; }
-            .header { margin-bottom: 30px; }
+        /* =========================================================
+           LAYOUT MOBILE
+           Aplica-se a celulares (tela estreita) e a celulares/tablets
+           com toque em modo paisagem. Computadores não são afetados.
+           ========================================================= */
+        @media (max-width: 768px),
+               (hover: none) and (pointer: coarse) and (max-width: 950px) {
+
+            /* Fundo: 'background-attachment: fixed' é instável em iOS/Android,
+               então a imagem passa para uma camada fixa própria */
+            body {
+                background: #000;
+                min-height: 100vh;
+                min-height: 100dvh;
+                overflow-x: hidden;
+            }
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                z-index: -1;
+                background: linear-gradient(var(--black-overlay), var(--black-overlay)),
+                            url('plano-fundo.png') no-repeat center center / cover;
+            }
+
+            /* Barra do relógio */
+            .top-bar { padding: 8px 15px; justify-content: center; }
+            #live-clock { font-size: 0.95rem; letter-spacing: 1px; }
+
+            /* Cabeçalho */
+            .header { margin-bottom: 20px; padding: 0 15px; box-sizing: border-box; }
+            .brasao {
+                position: static;          /* sai do canto e não sobrepõe o título */
+                display: block;
+                width: 80px;
+                margin: 15px auto 0;
+            }
+            h1 {
+                font-size: 1.6rem;
+                letter-spacing: 4px;
+                margin-top: 15px;
+                overflow-wrap: anywhere;
+            }
+            h2 {
+                font-size: 1.05rem;
+                letter-spacing: 2px;
+                margin: 0 0 10px;
+            }
+            .subtitle {
+                font-size: 0.9rem;
+                letter-spacing: 2px;
+                margin-top: 40px;          /* era 350px no desktop */
+            }
+
+            /* Cards */
+            .container {
+                grid-template-columns: 1fr;
+                width: 92%;
+                gap: 10px;
+                padding-bottom: 30px;
+            }
+            .card {
+                padding: 10px 14px;
+                min-height: 60px;          /* área de toque confortável */
+            }
+            .card-number {
+                font-size: 1.1rem;
+                margin-right: 12px;
+                min-width: 24px;
+            }
+            .card-logo {
+                width: 64px;
+                height: 42px;
+                margin-right: 12px;
+                flex-shrink: 0;
+            }
+            .card-title {
+                font-size: 1rem;
+                flex: 1;
+                min-width: 0;
+                overflow-wrap: anywhere;
+            }
+
+            /* Card DEJEM */
+            .dejem-header { width: 100%; }
+            .dejem-form { flex-wrap: wrap; }
+            .dejem-input {
+                flex: 1 1 140px;
+                min-width: 0;
+                font-size: 16px;           /* evita o zoom automático do iOS ao focar */
+                padding: 10px;
+            }
+            .dejem-button { flex: 1 1 120px; padding: 10px 12px; }
+
+            /* Rodapé */
+            footer {
+                box-sizing: border-box;    /* evita que o rodapé estoure a largura da tela */
+                padding: 18px 15px;
+                font-size: 0.75rem;
+                letter-spacing: 1px;
+                line-height: 1.5;
+            }
+        }
+
+        /* Celulares muito pequenos */
+        @media (max-width: 380px) {
+            h1 { font-size: 1.35rem; letter-spacing: 2px; }
+            h2 { font-size: 0.95rem; letter-spacing: 1px; }
+            .card-logo { width: 52px; height: 36px; }
+            #live-clock { font-size: 0.85rem; }
+            .dejem-form { flex-direction: column; }
+            .dejem-input, .dejem-button { flex: none; width: 100%; box-sizing: border-box; }
+        }
+
+        /* Telas de toque: evita o "hover preso" depois de tocar num card */
+        @media (hover: none) {
+            .card:hover { transform: none; }
         }
     </style>
 </head>
@@ -325,7 +438,7 @@
                 <span class="card-title">Escala DEJEM</span>
             </div>
             <div class="dejem-form">
-                <input type="text" id="idEscalaInput" class="dejem-input" placeholder="ID Escala (7 dígitos)" maxlength="7" pattern="\d{7}">
+                <input type="text" id="idEscalaInput" class="dejem-input" placeholder="ID Escala (7 dígitos)" maxlength="7" pattern="\d{7}" inputmode="numeric">
                 <button type="button" class="dejem-button" onclick="acessarEscalaDejem()">Acessar Escala</button>
             </div>
         </div>
