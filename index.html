@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <!-- Barra de Status Superior -->
-<div class="top-bar">
-    <div class="status-system">
-        <div class="status-dot"></div>
-    </div>
-    <div id="live-clock">--/--/---- --:--:--</div> <!-- O relógio é injetado aqui -->
-</div>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard 3º Batalhão de Caçadores</title>
     <style>
         /* Estilização da Barra Superior que contém o relógio */
 .top-bar {
+    position: sticky;            /* acompanha o scroll */
+    top: 0;
+    z-index: 1000;               /* fica acima dos cards e do conteúdo */
     width: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Fundo escuro translúcido */
-    border-bottom: 1px solid var(--gold); /* Linha dourada discreta embaixo */
+    background: rgba(0, 0, 0, 0.55); /* fundo escuro para o relógio ficar legível sobre o conteúdo */
+    border-bottom: 1px solid var(--gold);
     padding: 10px 25px;
-    display: flex-start;
-    justify-content: flex-start; /* Separa os itens (ex: status à esquerda, relógio à direita) */
+    display: flex;
+    justify-content: flex-start;
     align-items: center;
-    backdrop-filter: blur(4px); /* Efeito de desfoque moderno */
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     box-sizing: border-box;
-    z-index: 100;
 }
 
 /* Estilização específica do texto do Relógio */
@@ -250,6 +246,14 @@
     </style>
 </head>
 <body>
+    <!-- Barra de Status Superior -->
+<div class="top-bar">
+    <div class="status-system">
+        <div class="status-dot"></div>
+    </div>
+    <div id="live-clock">--/--/---- --:--:--</div> <!-- O relógio é injetado aqui -->
+</div>
+
 
     <div class="header">
         <img src="P3.png" class="brasao" alt="Brasão P3">
