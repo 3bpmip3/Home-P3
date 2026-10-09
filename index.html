@@ -3,542 +3,708 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard 3º Batalhão de Caçadores</title>
+    <meta name="description" content="Painel Operacional do 3º Batalhão de Caçadores - Links rápidos para ferramentas internas.">
+    <title>Dashboard | 3º Batalhão de Caçadores</title>
+    
+    <!-- Fontes Otimizadas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+
     <style>
-        /* Estilização da Barra Superior que contém o relógio */
-.top-bar {
-    position: sticky;            /* acompanha o scroll */
-    top: 0;
-    z-index: 1000;               /* fica acima dos cards e do conteúdo */
-    width: 100%;
-    background: rgba(0, 0, 0, 0.55); /* fundo escuro para o relógio ficar legível sobre o conteúdo */
-    border-bottom: 1px solid var(--gold);
-    padding: 10px 25px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    box-sizing: border-box;
-}
-
-/* Estilização específica do texto do Relógio */
-#live-clock {
-    font-family: 'Inter', monospace; /* Fonte limpa ou monoespacada para os números não saltarem */
-    font-size: 1.1rem;               /* Tamanho da letra */
-    color: var(--gold);              /* Cor dourada padrão do projeto */
-    font-weight: 700;                /* Negrito */
-    letter-spacing: 2px;             /* Espaçamento entre os caracteres */
-    text-shadow: 0 0 8px rgba(197, 179, 88, 0.4); /* Brilho suave */
-}
-
+        /* =========================================================
+           DESIGN SYSTEM (Variáveis CSS)
+           ========================================================= */
         :root {
-            --gold: #C5B358; 
-            --white-glass: rgba(255, 255, 255, 0.1); 
-            --black-overlay: rgba(0, 0, 0, 0.6); 
+            /* Cores */
+            --c-gold: #C5B358;
+            --c-gold-dark: #857101;
+            --c-gold-light: #E2D483;
+            --c-bg-dark: #0f1115;
+            --c-text-main: #F8F9FA;
+            --c-text-muted: #9CA3AF;
+            --c-text-hover: #111827;
+
+            /* Cores de Fundo (Glassmorphism Escuro) */
+            --c-glass: rgba(15, 17, 21, 0.75); 
+            --c-glass-hover: rgba(15, 17, 21, 0.9);
+            --c-border: rgba(197, 179, 88, 0.3);
+
+            /* Tipografia Fluida */
+            --f-main: 'Inter', system-ui, sans-serif;
+            --f-mono: 'Roboto Mono', monospace;
+            --fs-h1: clamp(1.8rem, 5vw, 3.5rem);
+            --fs-h2: clamp(1rem, 3vw, 1.5rem);
+            --fs-body: clamp(0.875rem, 2vw, 1rem);
+            --fs-small: clamp(0.75rem, 1.5vw, 0.875rem);
+
+            /* Espaçamento e Layout */
+            --sp-xs: 0.5rem;
+            --sp-sm: 1rem;
+            --sp-md: 1.5rem;
+            --sp-lg: 2rem;
+            --sp-xl: 3rem;
+            
+            /* Efeitos */
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition-fast: 0.2s ease;
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.6);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.8), 0 10px 10px -5px rgba(0, 0, 0, 0.6);
+            --shadow-panel: 0 15px 35px rgba(0, 0, 0, 0.8);
+        }
+
+        /* =========================================================
+           RESET E ESTILOS BASE
+           ========================================================= */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            background: linear-gradient(var(--black-overlay), var(--black-overlay)), 
-                        url('plano-fundo.png') no-repeat center center fixed;
-            background-size: cover; 
-            color: #857101;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            margin: 0;
+            font-family: var(--f-main);
+            background-color: var(--c-bg-dark);
+            color: var(--c-text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Fundo com Efeito Vinheta (Foco no Centro) */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: 
+                linear-gradient(
+                    to bottom, 
+                    rgba(15, 17, 21, 0.9) 0%,    
+                    rgba(15, 17, 21, 0.2) 25%,   
+                    rgba(15, 17, 21, 0.2) 75%,   
+                    rgba(15, 17, 21, 0.95) 100%  
+                ),
+                url('plano-fundo.png') no-repeat center center / cover;
+            background-color: #1a1a1a; 
+            image-rendering: -webkit-optimize-contrast;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--c-gold);
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        /* =========================================================
+           TOP BAR (RELÓGIO)
+           ========================================================= */
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 17, 21, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--c-border);
+            padding: var(--sp-xs) var(--sp-md);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .live-clock {
+            font-family: var(--f-mono);
+            font-size: var(--fs-small);
+            color: var(--c-gold);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            gap: var(--sp-xs);
+            text-transform: capitalize;
+        }
+
+        .live-clock::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #10B981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10B981;
+        }
+
+        /* =========================================================
+           PAINEL DEJEM (Canto Superior Esquerdo)
+           ========================================================= */
+        .dejem-top-left {
+            position: absolute;
+            top: 70px; 
+            left: 25px;
+            width: 100%;
+            max-width: 400px;
+            z-index: 90;
+            animation: fadeInDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =========================================================
+           HEADER / HERO SECTION
+           ========================================================= */
+        .hero {
+            text-align: center;
+            padding: var(--sp-xl) var(--sp-md) var(--sp-lg);
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-        }
-
-        /* --- Cabeçalho --- */
-        .header {
-            text-align: center; /* Mantém o alinhamento central */
-            margin-bottom: 5px; /* Diminua este valor para aproximar mais */
-            position: relative;
-            width: 100%;
-        }
-
-        .subtitle {
-            margin-bottom: 5px; /* Reduz o espaço logo abaixo do parágrafo */
+            gap: var(--sp-sm);
         }
 
         .brasao {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 120px; 
+            width: clamp(80px, 15vw, 120px);
             height: auto;
-            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.7));
-            z-index: 10;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
+            animation: float 6s ease-in-out infinite;
         }
 
-        h1 {
-            font-size: 3rem; 
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 20px;
-            margin-top: 40px; /* Adiciona o espaçamento no topo */
-            margin-bottom: 10px; /* Adiciona um pequeno espaço em relação ao subtítulo */
-            color: rgb(184, 159, 49);
-            text-shadow: 2px 2px 10px rgba(184,159,59,0.5);
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        h2 {
-            font-size: 1.8rem; /* Altere este valor para o tamanho que desejar */
-            color: var(--gold); /* Exemplo para manter a cor dourada */
-            text-align: center;
-            letter-spacing: 5px; /* Para dar um espaçamento entre as letras similar ao título */
-        }
-
-        .subtitle {
-            font-size: 2rem;
-            color: #a7a17b;
-            text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
-            opacity: 0.9;
-            margin-top: 350px;
-            letter-spacing: 5px;
-            font-weight: 600;
-        }
-
-        /* --- Grid de Ferramentas --- */
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 15px;
-            width: 95%;
-            max-width: 1300px;
-            padding-bottom: 50px;
-        }
-
-        .card {
-            background: var(--white-glass);
-            backdrop-filter: blur(4px);
-            border-radius: 15px;
-            padding: 12px 20px; 
-            text-decoration: none;
-            color: #ffffff; 
-            display: flex;
-            align-items: center;
-            min-height: 10px; /* Padroniza a altura de todos os cards para a do card DEJEM */
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0); 
-            box-shadow: 0 4px 15px rgba(0,0,0,10);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            background: rgb(184, 159, 49); 
-            color: #000000; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            border-color: var(--gold);
-            backdrop-filter: blur(0px);
-        }
-
-        .card-number {
-            font-size: 1.3rem;
-            color: var(--gold); 
-            margin-right: 25px;
+        .hero h1 {
+            font-size: var(--fs-h1);
             font-weight: 900;
-            min-width: 30px;
-            transition: color 0.3s ease;
-        }
-
-        .card:hover .card-number {
-            color: #4d4100;
-        }
-
-        .card-logo {
-            width: 100px;
-            height: 55px;
-            object-fit: contain;
-            margin-right: 15px;
-            filter: drop-shadow(0 2px 4px rgb(0, 0, 0));
-        }
-
-        .card-title {
-            font-size: 1.05rem;
-            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: clamp(2px, 1vw, 8px);
+            color: rgba(197, 179, 88, 0.85); 
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(197, 179, 88, 0.15); 
             line-height: 1.1;
         }
 
-        /* Estilos específicos para a caixa interativa do Card 10 */
-        .dejem-card {
+        .hero h2 {
+            font-size: var(--fs-h2);
+            color: rgba(248, 249, 250, 0.85); 
+            font-weight: 600;
+            letter-spacing: clamp(1px, 0.5vw, 4px);
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); 
+        }
+
+        .hero .subtitle {
+            font-size: var(--fs-small);
+            color: var(--c-text-main);
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: var(--sp-xs);
+            padding: 6px 16px;
+            background: var(--c-glass);
+            border-radius: 20px;
+            border: 1px solid var(--c-border);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* =========================================================
+           GRID DE FERRAMENTAS (DASHBOARD)
+           ========================================================= */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: var(--sp-sm);
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--sp-md) var(--sp-xl);
+        }
+
+        /* =========================================================
+           CARDS (Glassmorphism Escuro)
+           ========================================================= */
+        .card {
+            display: flex;
+            align-items: center;
+            gap: var(--sp-sm);
+            background: var(--c-glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius-md);
+            padding: var(--sp-sm);
+            text-decoration: none;
+            color: var(--c-text-main);
+            transition: var(--transition-smooth);
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+            min-height: 80px;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        }
+
+        .card:hover, .card:focus-visible {
+            transform: translateY(-5px);
+            background: var(--c-gold);
+            border-color: var(--c-gold-light);
+            box-shadow: var(--shadow-hover);
+            color: var(--c-text-hover);
+        }
+
+        .card-number {
+            font-family: var(--f-mono);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--c-gold);
+            min-width: 32px;
+            transition: var(--transition-fast);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .card:hover .card-number, .card:focus-visible .card-number {
+            color: var(--c-gold-dark);
+            text-shadow: none;
+        }
+
+        .card-logo {
+            width: 70px;
+            height: 50px;
+            object-fit: contain;
+            flex-shrink: 0;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.8));
+            transition: var(--transition-fast);
+        }
+
+        .card:hover .card-logo {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        .card-title {
+            font-size: var(--fs-body);
+            font-weight: 700;
+            line-height: 1.2;
+            flex: 1;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .card:hover .card-title {
+            text-shadow: none;
+        }
+
+        /* =========================================================
+           CARD ESPECÍFICO: DEJEM (Formulário)
+           ========================================================= */
+        .card-dejem {
             flex-direction: column;
-            justify-content: center;
             align-items: stretch;
-            gap: 8px;
+            justify-content: center;
+            gap: var(--sp-sm);
+            cursor: default;
+            box-shadow: var(--shadow-panel);
+            padding: var(--sp-md);
+        }
+
+        .card-dejem:hover {
+            background: var(--c-glass-hover);
+            border-color: var(--c-gold);
+            transform: translateY(-2px);
+            color: var(--c-text-main);
         }
 
         .dejem-header {
             display: flex;
             align-items: center;
+            gap: var(--sp-sm);
         }
 
         .dejem-form {
             display: flex;
-            gap: 6px;
+            gap: var(--sp-sm);
             width: 100%;
+            margin-top: var(--sp-xs);
         }
 
         .dejem-input {
             flex: 1;
-            padding: 6px 10px;
-            border-radius: 6px;
-            border: 1px solid var(--gold);
-            background: rgba(0, 0, 0, 0.5);
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 0.9rem;
+            padding: 8px 18px;
+            border-radius: 8px;
+            border: 1px solid var(--c-border);
+            background: rgba(0, 0, 0, 0.6);
+            color: var(--c-text-main);
+            font-family: var(--f-mono);
+            font-weight: 700;
+            font-size: 1.05rem;
             text-align: center;
             outline: none;
+            transition: var(--transition-fast);
+            min-width: 0;
         }
 
-        .card:hover .dejem-input {
-            background: rgba(255, 255, 255, 0.8);
-            color: #000000;
-            border-color: #000000;
+        .dejem-input:focus {
+            border-color: var(--c-gold);
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 0 2px rgba(197, 179, 88, 0.3);
+        }
+
+        .dejem-input::placeholder {
+            font-family: var(--f-main);
+            font-weight: 400;
+            font-size: 0.9rem;
+            color: var(--c-text-muted);
         }
 
         .dejem-button {
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 8px 24px;
+            border-radius: 8px;
             border: none;
-            background: var(--gold);
-            color: #000000;
-            font-weight: bold;
-            font-size: 0.85rem;
+            background: var(--c-gold);
+            color: var(--c-text-hover);
+            font-family: var(--f-main);
+            font-weight: 700;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: var(--transition-fast);
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            flex-shrink: 0;
         }
 
-        .card:hover .dejem-button {
-            background: #000000;
-            color: var(--gold);
+        .dejem-button:hover {
+            background: var(--c-gold-light);
+            transform: scale(1.02);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        footer {
-            margin-top: auto;
-            box-sizing: border-box; /* inclui o padding na largura de 100% (sem rolagem horizontal) */
-            padding: 25px;
-            color: var(--gold);
-            background: rgba(0, 0, 0, 0.7);
-            width: 100%;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            font-weight: bold;
-            text-align: center;
+        .dejem-button:active {
+            transform: scale(0.98);
         }
 
         /* =========================================================
-           LAYOUT MOBILE
-           Aplica-se a celulares (tela estreita) e a celulares/tablets
-           com toque em modo paisagem. Computadores não são afetados.
+           FOOTER (FRASE EM UMA ÚNICA LINHA)
            ========================================================= */
-        @media (max-width: 768px),
-               (hover: none) and (pointer: coarse) and (max-width: 950px) {
+        .footer {
+            margin-top: auto;
+            padding: var(--sp-md);
+            text-align: center;
+            background: rgba(15, 17, 21, 0.85);
+            border-top: 1px solid var(--c-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-sm);
+            /* Impede que a linha longa crie barra de rolagem horizontal */
+            overflow: hidden; 
+        }
 
-            /* Fundo: 'background-attachment: fixed' é instável em iOS/Android,
-               então a imagem passa para uma camada fixa própria */
-            body {
-                background: #000;
-                min-height: 100vh;
-                min-height: 100dvh;
-                overflow-x: hidden;
-            }
-            body::before {
-                content: "";
-                position: fixed;
-                inset: 0;
-                z-index: -1;
-                background: linear-gradient(var(--black-overlay), var(--black-overlay)),
-                            url('plano-fundo.png') no-repeat center center / cover;
-            }
+        .footer-quote {
+            /* Remove a restrição de largura */
+            max-width: 100%; 
+            margin: 0 auto;
+            color: var(--c-gold);
+            font-style: italic;
+            font-weight: 600;
+            letter-spacing: 1px;
+            line-height: 1.6;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            
+            /* Força a frase a ficar em apenas uma linha */
+            white-space: nowrap; 
+            
+            /* Ajusta o tamanho da fonte dinamicamente para caber em uma linha */
+            font-size: clamp(0.55rem, 1.1vw, 0.875rem); 
+        }
 
-            /* Barra do relógio */
-            .top-bar { padding: 8px 15px; justify-content: center; }
-            #live-clock { font-size: 0.95rem; letter-spacing: 1px; }
+        .footer-org {
+            font-size: var(--fs-small);
+            color: var(--c-text-muted);
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: var(--sp-xs);
+        }
 
-            /* Cabeçalho */
-            .header { margin-bottom: 20px; padding: 0 15px; box-sizing: border-box; }
-            .brasao {
-                position: static;          /* sai do canto e não sobrepõe o título */
-                display: block;
-                width: 80px;
-                margin: 15px auto 0;
+        /* =========================================================
+           MEDIA QUERIES
+           ========================================================= */
+        
+        @media (max-width: 1024px) {
+            .dejem-top-left {
+                position: relative;
+                top: auto;
+                left: auto;
+                width: 100%;
+                max-width: 400px;
+                margin: var(--sp-md) auto var(--sp-lg) auto;
+                padding: 0 var(--sp-md);
+                z-index: 10;
             }
-            h1 {
-                font-size: 1.6rem;
-                letter-spacing: 4px;
-                margin-top: 15px;
-                overflow-wrap: anywhere;
-            }
-            h2 {
-                font-size: 1.05rem;
-                letter-spacing: 2px;
-                margin: 0 0 10px;
-            }
-            .subtitle {
-                font-size: 0.9rem;
-                letter-spacing: 2px;
-                margin-top: 40px;          /* era 350px no desktop */
-            }
-
-            /* Cards */
-            .container {
-                grid-template-columns: 1fr;
-                width: 92%;
-                gap: 10px;
-                padding-bottom: 30px;
-            }
-            .card {
-                padding: 10px 14px;
-                min-height: 60px;          /* área de toque confortável */
-            }
-            .card-number {
-                font-size: 1.1rem;
-                margin-right: 12px;
-                min-width: 24px;
-            }
-            .card-logo {
-                width: 64px;
-                height: 42px;
-                margin-right: 12px;
-                flex-shrink: 0;
-            }
-            .card-title {
-                font-size: 1rem;
-                flex: 1;
-                min-width: 0;
-                overflow-wrap: anywhere;
-            }
-
-            /* Card DEJEM */
-            .dejem-header { width: 100%; }
-            .dejem-form { flex-wrap: wrap; }
-            .dejem-input {
-                flex: 1 1 140px;
-                min-width: 0;
-                font-size: 16px;           /* evita o zoom automático do iOS ao focar */
-                padding: 10px;
-            }
-            .dejem-button { flex: 1 1 120px; padding: 10px 12px; }
-
-            /* Rodapé */
-            footer {
-                box-sizing: border-box;    /* evita que o rodapé estoure a largura da tela */
-                padding: 18px 15px;
-                font-size: 0.75rem;
-                letter-spacing: 1px;
-                line-height: 1.5;
+            
+            .dejem-top-left .card-dejem {
+                width: 100%;
             }
         }
 
-        /* Celulares muito pequenos */
-        @media (max-width: 380px) {
-            h1 { font-size: 1.35rem; letter-spacing: 2px; }
-            h2 { font-size: 0.95rem; letter-spacing: 1px; }
-            .card-logo { width: 52px; height: 36px; }
-            #live-clock { font-size: 0.85rem; }
-            .dejem-form { flex-direction: column; }
-            .dejem-input, .dejem-button { flex: none; width: 100%; box-sizing: border-box; }
+        /* Em telas menores (tablets e celulares), permite a quebra de linha 
+           para que o texto não fique minúsculo ou ilegível */
+        @media (max-width: 768px) {
+            .footer-quote {
+                white-space: normal;
+                font-size: var(--fs-small);
+            }
         }
 
-        /* Telas de toque: evita o "hover preso" depois de tocar num card */
-        @media (hover: none) {
-            .card:hover { transform: none; }
+        @media (max-width: 480px) {
+            .dejem-form {
+                flex-direction: column;
+            }
+            .dejem-button {
+                width: 100%;
+                padding: 8px;
+            }
+            .hero {
+                padding: var(--sp-lg) var(--sp-sm) var(--sp-md);
+            }
+            .dashboard-grid {
+                padding: 0 var(--sp-sm) var(--sp-lg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Barra de Status Superior -->
-<div class="top-bar">
-    <div class="status-system">
-        <div class="status-dot"></div>
+
+    <!-- Barra Superior (Relógio) -->
+    <div class="top-bar">
+        <div id="live-clock" class="live-clock" aria-live="polite">
+            Carregando...
+        </div>
     </div>
-    <div id="live-clock">--/--/---- --:--:--</div> <!-- O relógio é injetado aqui -->
-</div>
 
+    <!-- Painel DEJEM (Canto Superior Esquerdo em Desktop) -->
+    <div class="dejem-top-left">
+        <div class="card card-dejem">
+            <div class="dejem-header">
+                <img src="DEJEM.png" class="card-logo" alt="Logo DEJEM" loading="lazy">
+                <span class="card-title">Escala DEJEM</span>
+            </div>
+            <form class="dejem-form" onsubmit="event.preventDefault(); acessarEscalaDejem();">
+                <input type="text" id="idEscalaInput" class="dejem-input" placeholder="ID Escala (7 dígitos)" maxlength="7" pattern="\d{7}" inputmode="numeric" aria-label="ID da Escala DEJEM">
+                <button type="submit" class="dejem-button">Acessar</button>
+            </form>
+        </div>
+    </div>
 
-    <div class="header">
-        <img src="P3.png" class="brasao" alt="Brasão P3">
+    <!-- Cabeçalho Principal -->
+    <header class="hero">
+        <img src="P3.png" class="brasao" alt="Brasão do 3º Batalhão de Caçadores" width="120" height="120">
         <h1>Painel Operacional</h1>
-        <h2> 3º BATALHÃO DE CAÇADORES</h2>
-        <p class="subtitle">LINK DIRETO PARA AS FERRAMENTAS</p>
-    </div>
+        <h2>3º Batalhão de Caçadores</h2>
+        <p class="subtitle">Link Direto para as Ferramentas</p>
+    </header>
 
-    <div class="container">
-        <a href="http://www.intranet.policiamilitar.sp.gov.br/" target="_blank" class="card">
+    <!-- Grid de Ferramentas (Sem o Card DEJEM) -->
+    <main class="dashboard-grid">
+        
+        <a href="http://www.intranet.policiamilitar.sp.gov.br/" target="_blank" rel="noopener noreferrer" class="card">
             <span class="card-number">01</span>
-            <img src="PMESP.png" class="card-logo" alt="Logo Intranet">
+            <img src="PMESP.png" class="card-logo" alt="Logo Intranet" loading="lazy">
             <span class="card-title">Intranet</span>
         </a>
 
-        <a href="https://ead.pmesp.org/login/index.php" target="_blank" class="card">
+        <a href="https://ead.pmesp.org/login/index.php" target="_blank" rel="noopener noreferrer" class="card">
             <span class="card-number">02</span>
-            <img src="EAD PMESP.png" class="card-logo" alt="Logo EAD">
+            <img src="EAD PMESP.png" class="card-logo" alt="Logo EAD" loading="lazy">
             <span class="card-title">Plataforma EAD</span>
         </a>
 
-        <a href="https://sistemasopr.intranet.policiamilitar.sp.gov.br/siopmweb/HSiopm.aspx" target="_blank" class="card">
+        <a href="https://sistemasopr.intranet.policiamilitar.sp.gov.br/siopmweb/HSiopm.aspx" target="_blank" rel="noopener noreferrer" class="card">
             <span class="card-number">03</span>
-            <img src="SIOPM Web.png" class="card-logo" alt="Logo SIOPM">
+            <img src="SIOPM Web.png" class="card-logo" alt="Logo SIOPM" loading="lazy">
             <span class="card-title">SIOPM Web</span>
         </a>
 
-        <a href="https://copomonline.policiamilitar.sp.gov.br/Login/Login" target="_blank" class="card">
+        <a href="https://copomonline.policiamilitar.sp.gov.br/Login/Login" target="_blank" rel="noopener noreferrer" class="card">
             <span class="card-number">04</span>
-            <img src="COPOM Online.png" class="card-logo" alt="Logo COPOM">
+            <img src="COPOM Online.png" class="card-logo" alt="Logo COPOM" loading="lazy">
             <span class="card-title">COPOM Online</span>
         </a>
 
-        <a href="http://201.55.56.170/medidasrestritivas/sys/layout/default/" target="_blank" class="card">
+        <a href="http://201.55.56.170/medidasrestritivas/sys/layout/default/" target="_blank" rel="noopener noreferrer" class="card">
             <span class="card-number">05</span>
-            <img src="Projeto VIDA.png" class="card-logo" alt="Logo Projeto VIDA">
+            <img src="Projeto VIDA.png" class="card-logo" alt="Logo Projeto VIDA" loading="lazy">
             <span class="card-title">Projeto V.I.D.A.</span>
         </a>
 
-        <a href="https://simprod.prodesp.sp.gov.br/sim/" target="_blank" class="card">
+        <a href="https://simprod.prodesp.sp.gov.br/sim/" target="_blank" rel="noopener noreferrer" class="card">
             <span class="card-number">06</span>
-            <img src="DETRAN.png" class="card-logo" alt="Logo SIM Multas">
+            <img src="DETRAN.png" class="card-logo" alt="Logo SIM Multas" loading="lazy">
             <span class="card-title">SIM Multas</span>
         </a>
 
-        <a href="https://portal.muralhapaulista.sp.gov.br/" target="_blank" class="card">
+        <a href="https://operacional.muralhapaulista.sp.gov.br/Home/Login/" target="_blank" rel="noopener noreferrer" class="card">
             <span class="card-number">07</span>
-            <img src="Muralha Paulista.png" class="card-logo" alt="Logo Muralha">
+            <img src="Muralha Paulista.png" class="card-logo" alt="Logo Muralha" loading="lazy">
             <span class="card-title">Muralha Paulista</span>
         </a>
 
-        <a href="https://minhaarea.sp.gov.br/plataformasp" target="_blank" class="card">
+        <a href="https://minhaarea.sp.gov.br/plataformasp" target="_blank" rel="noopener noreferrer" class="card">
             <span class="card-number">08</span>
-            <img src="SEI.png" class="card-logo" alt="Logo SEI">
+            <img src="SEI.png" class="card-logo" alt="Logo SEI" loading="lazy">
             <span class="card-title">SEI</span>
         </a>
 
-        <a href="https://www.infocrim.ssp.sp.gov.br/" target="_blank" class="card">
+        <a href="https://www.infocrim.ssp.sp.gov.br/" target="_blank" rel="noopener noreferrer" class="card">
             <span class="card-number">09</span>
-            <img src="SSP-SP.png" class="card-logo" alt="Logo Infocrim">
+            <img src="SSP-SP.png" class="card-logo" alt="Logo Infocrim" loading="lazy">
             <span class="card-title">Infocrim 4.0</span>
         </a>
 
-        <!-- Card 10 (Escala DEJEM) -->
-        <div class="card dejem-card">
-            <div class="dejem-header">
-                <span class="card-number">10</span>
-                <img src="DEJEM.png" class="card-logo" alt="Logo DEJEM">
-                <span class="card-title">Escala DEJEM</span>
-            </div>
-            <div class="dejem-form">
-                <input type="text" id="idEscalaInput" class="dejem-input" placeholder="ID Escala (7 dígitos)" maxlength="7" pattern="\d{7}" inputmode="numeric">
-                <button type="button" class="dejem-button" onclick="acessarEscalaDejem()">Acessar Escala</button>
-            </div>
-        </div>
+        <!-- Card 10 (DEJEM) foi movido para o topo -->
 
-        <a href="https://web.whatsapp.com/" target="_blank" class="card">
-            <span class="card-number">11</span>
-            <img src="WhatsApp.png" class="card-logo" alt="Logo WhatsApp">
+        <a href="https://web.whatsapp.com/" target="_blank" rel="noopener noreferrer" class="card">
+            <span class="card-number">10</span>
+            <img src="WhatsApp.png" class="card-logo" alt="Logo WhatsApp" loading="lazy">
             <span class="card-title">WhatsApp Web</span>
         </a>
 
-        <a href="https://sgp-prod.intranet.policiamilitar.sp.gov.br/SGP/Dashboard" target="_blank" class="card">
-            <span class="card-number">12</span>
-            <img src="SGP.png" class="card-logo" alt="Logo SGP">
+        <a href="https://sgp-prod.intranet.policiamilitar.sp.gov.br/SGP/Dashboard" target="_blank" rel="noopener noreferrer" class="card">
+            <span class="card-number">11</span>
+            <img src="SGP.png" class="card-logo" alt="Logo SGP" loading="lazy">
             <span class="card-title">Portal RH - SGP</span>
         </a>
 
-        <a href="https://sistemasadmin.intranet.policiamilitar.sp.gov.br/Pmesp.Sitaf/#/login" target="_blank" class="card">
-            <span class="card-number">13</span>
-            <img src="SITAF.png" class="card-logo" alt="Logo SITAF">
+        <a href="https://sistemasadmin.intranet.policiamilitar.sp.gov.br/Pmesp.Sitaf/#/login" target="_blank" rel="noopener noreferrer" class="card">
+            <span class="card-number">12</span>
+            <img src="SITAF.png" class="card-logo" alt="Logo SITAF" loading="lazy">
             <span class="card-title">SITAF</span>
         </a>
 
-        <a href="https://sistemasadmin.intranet.policiamilitar.sp.gov.br/Pericias" target="_blank" class="card">
-            <span class="card-number">14</span>
-            <img src="DS.png" class="card-logo" alt="Logo DS">
+        <a href="https://sistemasadmin.intranet.policiamilitar.sp.gov.br/Pericias" target="_blank" rel="noopener noreferrer" class="card">
+            <span class="card-number">13</span>
+            <img src="DS.png" class="card-logo" alt="Logo DS" loading="lazy">
             <span class="card-title">SIGS Saúde</span>
         </a>
 
-        <a href="https://correio.policiamilitar.sp.gov.br/iwaredir.nsf" target="_blank" class="card">
-            <span class="card-number">15</span>
-            <img src="iNotes.png" class="card-logo" alt="Logo iNotes">
+        <a href="https://correio.policiamilitar.sp.gov.br/iwaredir.nsf" target="_blank" rel="noopener noreferrer" class="card">
+            <span class="card-number">14</span>
+            <img src="iNotes.png" class="card-logo" alt="Logo iNotes" loading="lazy">
             <span class="card-title">iNotes PMESP</span>
         </a>
 
-        <a href="http://www.intranet.ccb.policiamilitar.sp.gov.br/aplicacoes/sisbol_login/frmlogin_cpd/" target="_blank" class="card">
-            <span class="card-number">16</span>
-            <img src="DP.png" class="card-logo" alt="Logo DP">
+        <a href="http://www.intranet.ccb.policiamilitar.sp.gov.br/aplicacoes/sisbol_login/frmlogin_cpd/" target="_blank" rel="noopener noreferrer" class="card">
+            <span class="card-number">15</span>
+            <img src="DP.png" class="card-logo" alt="Logo DP" loading="lazy">
             <span class="card-title">Assentamento Individual</span>
         </a>
 
-        <a href="http://sicoordop.intranet.policiamilitar.sp.gov.br/login/index.php" target="_blank" class="card">
-            <span class="card-number">17</span>
-            <img src="CoordOpPM.png" class="card-logo" alt="Logo CoordOp">
+        <a href="http://sicoordop.intranet.policiamilitar.sp.gov.br/login/index.php" target="_blank" rel="noopener noreferrer" class="card">
+            <span class="card-number">16</span>
+            <img src="CoordOpPM.png" class="card-logo" alt="Logo CoordOp" loading="lazy">
             <span class="card-title">SICoorOp PM</span>
         </a>
 
-        <a href="http://10.40.68.79:8000/" target="_blank" class="card">
-            <span class="card-number">18</span>
-            <img src="PaperlessNGX.png" class="card-logo" alt="Logo PaperlessNGX">
-            <span class="card-title">Arquivo Digital P/3 - Paperless</span>
+        <a href="http://10.40.68.79:8000/" target="_blank" rel="noopener noreferrer" class="card">
+            <span class="card-number">17</span>
+            <img src="PaperlessNGX.png" class="card-logo" alt="Logo PaperlessNGX" loading="lazy">
+            <span class="card-title">Arquivo Digital P/3</span>
         </a>
-    </div>
+    </main>
 
-    <footer>
-        <f1><i>"Nós, Policiais Militares, sob a proteção de Deus, estamos compromissados com a Defesa da Vida, da Integridade Física e da Dignidade da Pessoa Humana!"</i></f1>
+    <!-- Rodapé -->
+    <footer class="footer">
+        <p class="footer-quote">
+            "Nós, Policiais Militares, sob a proteção de Deus, estamos compromissados com a Defesa da Vida, da Integridade Física e da Dignidade da Pessoa Humana!"
+        </p>
+
     </footer>
 
+    <!-- JavaScript Otimizado -->
     <script>
-        // Atualização do Relógio em Tempo Real na Barra Superior
-    function atualizarRelogio() {
-        const agora = new Date();
-        const dataFormatada = agora.toLocaleDateString('pt-BR');
-        const horaFormatada = agora.toLocaleTimeString('pt-BR');
-        document.getElementById('live-clock').innerText = `${dataFormatada} | ${horaFormatada}`;
-    }
-    
-    // Executa a função a cada 1 segundo (1000ms)
-    setInterval(atualizarRelogio, 1000);
-    
-    // Executa imediatamente ao carregar a página para não exibir o texto padrão "--/--/----"
-    atualizarRelogio();
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- Relógio em Tempo Real (Data por Extenso) ---
+            const clockElement = document.getElementById('live-clock');
+            
+            const atualizarRelogio = () => {
+                const agora = new Date();
+                
+                const opcoesData = { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                };
+                
+                const dataFormatada = agora.toLocaleDateString('pt-BR', opcoesData);
+                const horaFormatada = agora.toLocaleTimeString('pt-BR');
+                
+                clockElement.textContent = `${dataFormatada} | ${horaFormatada}`;
+            };
 
-        // Função para validar e redirecionar a Escala DEJEM
+            atualizarRelogio();
+            setInterval(atualizarRelogio, 1000);
+
+            // --- Lógica do DEJEM ---
+            const inputEscala = document.getElementById('idEscalaInput');
+            
+            inputEscala.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/\D/g, '');
+            });
+        });
+
         function acessarEscalaDejem() {
             const input = document.getElementById('idEscalaInput');
             const valor = input.value.trim();
             const regex = /^\d{7}$/;
 
             if (!regex.test(valor)) {
-                alert('Por favor, insira exatamente 07 dígitos numéricos para a ID da Escala.');
+                input.style.borderColor = '#EF4444';
+                input.style.boxShadow = '0 0 0 2px rgba(239, 68, 68, 0.3)';
                 input.focus();
+                
+                setTimeout(() => {
+                    input.style.borderColor = '';
+                    input.style.boxShadow = '';
+                }, 2000);
+                
                 return;
             }
 
             const urlBase = 'https://sistemasadmin.intranet.policiamilitar.sp.gov.br/Escala/arrelpreesc.aspx?';
-            window.open(urlBase + valor, '_blank');
+            window.open(urlBase + valor, '_blank', 'noopener,noreferrer');
+            input.value = '';
         }
-
-        // Permite enviar apertando a tecla Enter no input da Escala DEJEM
-        document.getElementById('idEscalaInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                acessarEscalaDejem();
-            }
-        });
-
-        // Bloqueia qualquer caractere que não seja número no campo
-        document.getElementById('idEscalaInput').addEventListener('input', function(e) {
-            this.value = this.value.replace(/\D/g, '');
-        });
     </script>
-
 </body>
 </html>
