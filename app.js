@@ -25,7 +25,7 @@
         { id: 4, title: 'COPOM Online', url: 'https://copomonline.policiamilitar.sp.gov.br/Login/Login', img: 'COPOM Online.png', alt: 'Logo COPOM' },
         { id: 5, title: 'Projeto V.I.D.A.', url: 'http://201.55.56.170/medidasrestritivas/sys/layout/default/', img: 'Projeto VIDA.png', alt: 'Logo Projeto VIDA' },
         { id: 6, title: 'SIM Multas', url: 'https://simprod.prodesp.sp.gov.br/sim/', img: 'DETRAN.png', alt: 'Logo SIM Multas' },
-        { id: 7, title: 'Muralha Paulista', url: 'https://operacional.muralhapaulista.sp.gov.br/Home/Login/', img: 'Muralha Paulista.png', alt: 'Logo Muralha' },
+        { id: 7, title: 'Muralha Paulista', url: 'https://portal.muralhapaulista.sp.gov.br/login?error=login_required&returnUrl=%2F', img: 'Muralha Paulista.png', alt: 'Logo Muralha' },
         { id: 8, title: 'SEI', url: 'https://minhaarea.sp.gov.br/plataformasp', img: 'SEI.png', alt: 'Logo SEI' },
         { id: 9, title: 'Infocrim 4.0', url: 'https://www.infocrim.ssp.sp.gov.br/', img: 'SSP-SP.png', alt: 'Logo Infocrim' },
         { id: 10, title: 'WhatsApp Web', url: 'https://web.whatsapp.com/', img: 'WhatsApp.png', alt: 'Logo WhatsApp' },
