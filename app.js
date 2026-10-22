@@ -8,7 +8,14 @@
     // =========================================================
     // CONFIGURAÇÃO
     // =========================================================
-    const CONFIG = Object.freeze({
+    function deepFreeze(obj) {
+        Object.values(obj).forEach(v => {
+            if (v && typeof v === 'object' && !Object.isFrozen(v)) deepFreeze(v);
+        });
+        return Object.freeze(obj);
+    }
+
+    const CONFIG = deepFreeze({
         DEJEM_URL_BASE: 'https://sistemasadmin.intranet.policiamilitar.sp.gov.br/Escala/arrelpreesc.aspx?',
         DEJEM_ID_REGEX: /^\d{7}$/,
         STORAGE_KEYS: {
@@ -19,25 +26,27 @@
     });
 
     const TOOLS = Object.freeze([
-        { id: 1, title: 'Intranet', url: 'http://www.intranet.policiamilitar.sp.gov.br/', img: 'PMESP.png', alt: 'Logo Intranet' },
-        { id: 2, title: 'Plataforma EAD', url: 'https://ead.pmesp.org/login/index.php', img: 'EAD PMESP.png', alt: 'Logo EAD' },
-        { id: 3, title: 'SIOPM Web', url: 'https://sistemasopr.intranet.policiamilitar.sp.gov.br/siopmweb/HSiopm.aspx', img: 'SIOPM Web.png', alt: 'Logo SIOPM' },
-        { id: 4, title: 'COPOM Online', url: 'https://copomonline.policiamilitar.sp.gov.br/Login/Login', img: 'COPOM Online.png', alt: 'Logo COPOM' },
-        { id: 5, title: 'Projeto V.I.D.A.', url: 'http://201.55.56.170/medidasrestritivas/sys/layout/default/', img: 'Projeto VIDA.png', alt: 'Logo Projeto VIDA' },
-        { id: 6, title: 'SIM Multas', url: 'https://simprod.prodesp.sp.gov.br/sim/', img: 'DETRAN.png', alt: 'Logo SIM Multas' },
-        { id: 7, title: 'Muralha Paulista', url: 'https://portal.muralhapaulista.sp.gov.br/login?error=login_required&returnUrl=%2F', img: 'Muralha Paulista.png', alt: 'Logo Muralha' },
-        { id: 8, title: 'SEI', url: 'https://minhaarea.sp.gov.br/plataformasp', img: 'SEI.png', alt: 'Logo SEI' },
-        { id: 9, title: 'Infocrim 4.0', url: 'https://www.infocrim.ssp.sp.gov.br/', img: 'SSP-SP.png', alt: 'Logo Infocrim' },
-        { id: 10, title: 'WhatsApp Web', url: 'https://web.whatsapp.com/', img: 'WhatsApp.png', alt: 'Logo WhatsApp' },
-        { id: 11, title: 'Portal RH - SGP', url: 'https://sgp-prod.intranet.policiamilitar.sp.gov.br/SGP/Dashboard', img: 'SGP.png', alt: 'Logo SGP' },
-        { id: 12, title: 'SITAF', url: 'https://sistemasadmin.intranet.policiamilitar.sp.gov.br/Pmesp.Sitaf/#/login', img: 'SITAF.png', alt: 'Logo SITAF' },
-        { id: 13, title: 'SIGS Saúde', url: 'https://sistemasadmin.intranet.policiamilitar.sp.gov.br/Pericias', img: 'DS.png', alt: 'Logo DS' },
-        { id: 14, title: 'iNotes PMESP', url: 'https://correio.policiamilitar.sp.gov.br/iwaredir.nsf', img: 'iNotes.png', alt: 'Logo iNotes' },
-        { id: 15, title: 'Assentamento Individual', url: 'http://www.intranet.ccb.policiamilitar.sp.gov.br/aplicacoes/sisbol_login/frmlogin_cpd/', img: 'DP.png', alt: 'Logo DP' },
-        { id: 16, title: 'SICoorOp PM', url: 'http://sicoordop.intranet.policiamilitar.sp.gov.br/login/index.php', img: 'CoordOpPM.png', alt: 'Logo CoordOp' },
-        { id: 17, title: 'Arquivo Digital P/3', url: 'http://10.40.68.79:8000/', img: 'PaperlessNGX.png', alt: 'Logo PaperlessNGX' },
+        { id: 1,  title: 'Intranet',                 url: 'http://www.intranet.policiamilitar.sp.gov.br/',                                                          img: 'PMESP.png',             alt: 'Logo Intranet' },
+        { id: 2,  title: 'Plataforma EAD',           url: 'https://ead.pmesp.org/login/index.php',                                                                    img: 'EAD PMESP.png',         alt: 'Logo EAD' },
+        { id: 3,  title: 'SIOPM Web',                url: 'https://sistemasopr.intranet.policiamilitar.sp.gov.br/siopmweb/HSiopm.aspx',                               img: 'SIOPM Web.png',         alt: 'Logo SIOPM' },
+        { id: 4,  title: 'COPOM Online',             url: 'https://copomonline.policiamilitar.sp.gov.br/Login/Login',                                                 img: 'COPOM Online.png',      alt: 'Logo COPOM' },
+        { id: 5,  title: 'Projeto V.I.D.A.',         url: 'http://201.55.56.170/medidasrestritivas/sys/layout/default/',                                              img: 'Projeto VIDA.png',      alt: 'Logo Projeto VIDA' },
+        { id: 6,  title: 'SIM Multas',               url: 'https://simprod.prodesp.sp.gov.br/sim/',                                                                   img: 'DETRAN.png',            alt: 'Logo SIM Multas' },
+        { id: 7,  title: 'Muralha Paulista',         url: 'https://portal.muralhapaulista.sp.gov.br/login?error=login_required&returnUrl=%2F',                         img: 'Muralha Paulista.png',  alt: 'Logo Muralha' },
+        { id: 8,  title: 'SEI',                      url: 'https://minhaarea.sp.gov.br/plataformasp',                                                                 img: 'SEI.png',               alt: 'Logo SEI' },
+        { id: 9,  title: 'Infocrim 4.0',             url: 'https://www.infocrim.ssp.sp.gov.br/',                                                                      img: 'SSP-SP.png',            alt: 'Logo Infocrim' },
+        { id: 10, title: 'WhatsApp Web',             url: 'https://web.whatsapp.com/',                                                                                img: 'WhatsApp.png',          alt: 'Logo WhatsApp' },
+        { id: 11, title: 'Portal RH - SGP',          url: 'https://sgp-prod.intranet.policiamilitar.sp.gov.br/SGP/Dashboard',                                          img: 'SGP.png',               alt: 'Logo SGP' },
+        { id: 12, title: 'SITAF',                    url: 'https://sistemasadmin.intranet.policiamilitar.sp.gov.br/Pmesp.Sitaf/#/login',                              img: 'SITAF.png',             alt: 'Logo SITAF' },
+        { id: 13, title: 'SIGS Saúde',               url: 'https://sistemasadmin.intranet.policiamilitar.sp.gov.br/Pericias',                                         img: 'DS.png',                alt: 'Logo DS' },
+        { id: 14, title: 'iNotes PMESP',             url: 'https://correio.policiamilitar.sp.gov.br/iwaredir.nsf',                                                    img: 'iNotes.png',            alt: 'Logo iNotes' },
+        { id: 15, title: 'Assentamento Individual',  url: 'http://www.intranet.ccb.policiamilitar.sp.gov.br/aplicacoes/sisbol_login/frmlogin_cpd/',                    img: 'DP.png',                alt: 'Logo DP' },
+        { id: 16, title: 'SICoorOp PM',              url: 'http://sicoordop.intranet.policiamilitar.sp.gov.br/login/index.php',                                       img: 'CoordOpPM.png',         alt: 'Logo CoordOp' },
+        { id: 17, title: 'Arquivo Digital P/3',      url: 'http://10.40.68.79:8000/',                                                                                 img: 'PaperlessNGX.png',      alt: 'Logo PaperlessNGX' },
     ]);
 
+    // ⚠️ CORRIGIDO: o host real do Muralha é "portal.muralhapaulista.sp.gov.br".
+    // Mantive "operacional." também para não quebrar caso a URL mude de novo.
     const ALLOWED_HOSTS = Object.freeze([
         'intranet.policiamilitar.sp.gov.br',
         'policiamilitar.sp.gov.br',
@@ -46,7 +55,7 @@
         'copomonline.policiamilitar.sp.gov.br',
         '201.55.56.170',
         'simprod.prodesp.sp.gov.br',
-        'operacional.muralhapaulista.sp.gov.br',
+        'muralhapaulista.sp.gov.br',          // <-- cobre portal.* e operacional.*
         'minhaarea.sp.gov.br',
         'infocrim.ssp.sp.gov.br',
         'web.whatsapp.com',
@@ -61,7 +70,7 @@
     // =========================================================
     // UTILITÁRIOS
     // =========================================================
-    const $ = (selector, root) => (root || document).querySelector(selector);
+    const $  = (selector, root) => (root || document).querySelector(selector);
     const $$ = (selector, root) => [...(root || document).querySelectorAll(selector)];
 
     function isSafeUrl(rawUrl) {
@@ -79,10 +88,15 @@
     function safeOpen(url) {
         if (!isSafeUrl(url)) {
             showToast('URL de destino não autorizada.', 'error');
+            console.error('[Segurança] Tentativa de abrir URL fora da whitelist:', url);
             return false;
         }
         window.open(url, '_blank', 'noopener,noreferrer');
         return true;
+    }
+
+    function buildDejemUrl(id) {
+        return CONFIG.DEJEM_URL_BASE + encodeURIComponent(id);
     }
 
     const storage = {
@@ -192,10 +206,15 @@
         if (!grid) return;
 
         const fragment = document.createDocumentFragment();
+        let blocked = 0;
 
         TOOLS.forEach(tool => {
             if (!isSafeUrl(tool.url)) {
-                console.warn('[Segurança] URL bloqueada para "' + tool.title + '": ' + tool.url);
+                blocked++;
+                console.error(
+                    '[Segurança] Ferramenta "' + tool.title +
+                    '" bloqueada — host não está em ALLOWED_HOSTS: ' + tool.url
+                );
                 return;
             }
             const link = document.createElement('a');
@@ -228,6 +247,11 @@
         });
 
         grid.appendChild(fragment);
+
+        if (blocked > 0) {
+            // Ajuda a detectar futuras regressões sem quebrar o layout.
+            console.warn('[Painel] ' + blocked + ' ferramenta(s) ocultada(s) por whitelist.');
+        }
     }
 
     // =========================================================
@@ -253,8 +277,7 @@
                 setTimeout(() => input.classList.remove('is-invalid'), 2000);
                 return;
             }
-            const url = CONFIG.DEJEM_URL_BASE + encodeURIComponent(value);
-            if (!safeOpen(url)) return;
+            if (!safeOpen(buildDejemUrl(value))) return;
             addToHistory(value);
             input.value = '';
         });
@@ -322,8 +345,7 @@
 
             el.append(idSpan, timeSpan);
             el.addEventListener('click', () => {
-                const url = CONFIG.DEJEM_URL_BASE + encodeURIComponent(item.id);
-                if (safeOpen(url)) closeModal();
+                if (safeOpen(buildDejemUrl(item.id))) closeModal();
             });
             list.appendChild(el);
         });
